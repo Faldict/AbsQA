@@ -1,5 +1,6 @@
 import re
 import json
+import hashlib
 
 DATASET = '../data/dataset.tsv'
 data = []
@@ -28,10 +29,11 @@ with open(DATASET, 'r') as f:
                 start_pos = abstract.find(cols[i])
                 if start_pos != -1 and len(cols[i]) > 0:
                     paragraph['qas'].append({
+                        'id': hashlib.md5(str(cols[i]).encode('utf-8')).hexdigest(),
                         'question': questions[i],
                         'answers': [{
                             'text': cols[i],
-                            'answer_start': start_pos
+                            'answer_start': start_pos,
                         }]
                     })
                     total += 1
